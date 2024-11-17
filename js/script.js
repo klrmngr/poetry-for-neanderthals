@@ -42,6 +42,10 @@ document.getElementById('reset-score').addEventListener('click', function() {
     resetGame();
 });
 
+document.getElementById('back-to-main').addEventListener('click', function() {
+    backToMenu();
+});
+
 document.getElementById('start-game-60').addEventListener('click', function() {
     startGame(60);
 });
@@ -81,6 +85,14 @@ function startGame(duration) {
     startCountdown();
 }
 
+function backToMenu() {
+    game_running = false;
+    const timer_menu = document.getElementById('timer-menu');
+    timer_menu.classList.remove('hidden');
+    const game_screen = document.getElementById('game-screen');
+    game_screen.classList.add('hidden');
+}
+
 function resetGame() {
     updateWords();
     game_running = true;
@@ -103,6 +115,7 @@ function startCountdown() {
 
         if (timer <= 0) {
             clearInterval(countdownInterval); // Stop the countdown
+            console.log("stop timer")
             game_running = false;
         }
     }, 200); // check timer every 200ms
