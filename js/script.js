@@ -8,6 +8,7 @@ let words;
 let score_glad = score_mad = score = current_word = 0;
 let max_timer;
 let timer;
+let game_end_timestamp;
 let game_running = false;
 
 // Run the initialize function when the DOM is fully loaded
@@ -93,16 +94,18 @@ function resetGame() {
 function startCountdown() {
     // Display the initial time
     document.getElementById('timer-display').textContent = `Time: ${timer}s`;
-
+    game_end_timestamp = Date.now() + max_timer * 1000;
     countdownInterval = setInterval(() => {
-        timer--;
+        let current_timestamp = Date.now();
+
+        timer = Math.round((game_end_timestamp - current_timestamp) / 1000);
         document.getElementById('timer-display').textContent = `Time: ${timer}s`;
 
         if (timer <= 0) {
             clearInterval(countdownInterval); // Stop the countdown
             game_running = false;
         }
-    }, 1000); // Update every second
+    }, 200); // check timer every 200ms
 }
 
 function updateWords() {
