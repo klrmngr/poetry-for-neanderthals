@@ -8,6 +8,7 @@ let words;
 let score_glad = score_mad = score = current_word = 0;
 let max_timer;
 let timer;
+let game_end_timestamp;
 let game_running = false;
 
 // Run the initialize function when the DOM is fully loaded
@@ -39,6 +40,10 @@ document.getElementById('score+3').addEventListener('click', function() {
 
 document.getElementById('reset-score').addEventListener('click', function() {
     resetGame();
+});
+
+document.getElementById('back-to-main').addEventListener('click', function() {
+    backToMenu();
 });
 
 document.getElementById('start-game-60').addEventListener('click', function() {
@@ -80,6 +85,14 @@ function startGame(duration) {
     startCountdown();
 }
 
+function backToMenu() {
+    game_running = false;
+    const timer_menu = document.getElementById('timer-menu');
+    timer_menu.classList.remove('hidden');
+    const game_screen = document.getElementById('game-screen');
+    game_screen.classList.add('hidden');
+}
+
 function resetGame() {
     updateWords();
     game_running = true;
@@ -93,16 +106,19 @@ function resetGame() {
 function startCountdown() {
     // Display the initial time
     document.getElementById('timer-display').textContent = `Time: ${timer}s`;
-
+    game_end_timestamp = Date.now() + max_timer * 1000;
     countdownInterval = setInterval(() => {
-        timer--;
+        let current_timestamp = Date.now();
+
+        timer = Math.round((game_end_timestamp - current_timestamp) / 1000);
         document.getElementById('timer-display').textContent = `Time: ${timer}s`;
 
         if (timer <= 0) {
             clearInterval(countdownInterval); // Stop the countdown
+            console.log("stop timer")
             game_running = false;
         }
-    }, 1000); // Update every second
+    }, 200); // check timer every 200ms
 }
 
 function updateWords() {
