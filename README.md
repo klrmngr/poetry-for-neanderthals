@@ -2,7 +2,7 @@
 
 Verses For Cave Men is an unofficial companion site for the party game Poetry for Neanderthals.
 
-[https://kz3640.github.io/poetry-for-neanderthals/](https://kz3640.github.io/poetry-for-neanderthals/)
+[https://klrmgnr.github.io/poetry-for-neanderthals/](https://klrmngr.github.io/poetry-for-neanderthals/)
 
 [Buy Poetry for Neanderthals](https://www.explodingkittens.com/products/poetry-for-neanderthals)
 
