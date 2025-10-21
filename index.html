@@ -8,18 +8,14 @@
 </head>
 <body class="flex items-center justify-center h-screen bg-gray-50">
 
-    <!-- Timer Selection Menu -->
-    <div id="timer-menu" class="border border-gray-200 rounded-lg shadow-lg w-96 bg-white">
+    <!-- Options Menu -->
+    <div id="options-menu" class="border border-gray-200 rounded-lg shadow-lg w-96 bg-white">
         <div class="p-4">
-            <h1 class="text-center text-xl font-bold mb-4">Select Timer Length</h1>
+            <h1 class="text-center text-xl font-bold mb-4">Options</h1>
             <div class="grid grid-cols-1 gap-2">
-                <button id="start-game-60" class="bg-blue-100 text-blue-600 font-semibold hover:bg-blue-200 transition duration-300 p-2 focus:outline-none">60 Seconds</button>
-
-                <!-- Custom Timer -->
-                <div class="flex items-center space-x-2">
-                    <input type="number" id="custom-time" placeholder="Time in Seconds" class="border p-2 w-full focus:outline-none">
-                    <button id="start-game-custom" class="bg-green-100 text-green-600 font-semibold hover:bg-green-200 transition duration-300 p-2 focus:outline-none">Start</button>
-                </div>
+                <label for="time-input">Timer length in seconds</label>
+                <input type="number" id="time-input" class="border p-2 w-full focus:outline-none" value="60">
+                <button id="start-game" class="bg-blue-100 text-blue-600 font-semibold hover:bg-blue-200 transition duration-300 p-2 focus:outline-none">Start</button>
             </div>
         </div>
     </div>

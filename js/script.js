@@ -41,24 +41,20 @@ document.getElementById('reset-score').addEventListener('click', function() {
     resetGame();
 });
 
-document.getElementById('start-game-60').addEventListener('click', function() {
-    startGame(60);
-});
-
-document.getElementById('start-game-custom').addEventListener('click', function() {
-    const custom_time = parseInt(document.getElementById('custom-time').value, 10);
-    const inputElement = document.getElementById('custom-time');
+document.getElementById('start-game').addEventListener('click', function() {
+    const time_input_element = document.getElementById('time-input');
+    const time = parseInt(time_input_element.value, 10);
     
-    if (custom_time < 1 || Number.isNaN(custom_time)) {
-        inputElement.style.transition = '';
-        inputElement.classList.add('bg-red-200');
+    if (time < 1 || Number.isNaN(time)) {
+        time_input_element.style.transition = '';
+        time_input_element.classList.add('bg-red-200');
 
         setTimeout(() => {
-            inputElement.style.transition = 'background-color 1s ease, border-color 1s ease';
-            inputElement.classList.remove('bg-red-200');
+            time_input_element.style.transition = 'background-color 1s ease, border-color 1s ease';
+            time_input_element.classList.remove('bg-red-200');
         }, 300);
     } else {
-        startGame(custom_time);
+        startGame(time);
     }
 });
 
@@ -71,8 +67,8 @@ function startGame(duration) {
     score = 0;
     document.getElementById('score').textContent = `Score: ${score}`;
     
-    const timer_menu = document.getElementById('timer-menu');
-    timer_menu.classList.add('hidden');
+    const options_menu = document.getElementById('options-menu');
+    options_menu.classList.add('hidden');
     const game_screen = document.getElementById('game-screen');
     game_screen.classList.remove('hidden');
     
