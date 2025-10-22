@@ -6,7 +6,7 @@
     <title>Verses for Cave Men</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="flex items-center justify-center h-screen bg-gray-50">
+<body class="flex flex-col items-center justify-center h-screen bg-gray-50">
 
     <!-- Options Menu -->
     <div id="options-menu" class="border border-gray-200 rounded-lg shadow-lg w-96 bg-white">
@@ -76,6 +76,9 @@
             </button>
         </div>
     </div>
+
+    <!-- Error Message (hidden initially) -->
+    <div id="error-message" class="border border-red-200 rounded-lg shadow-lg bg-red-200 w-96 mt-4 p-4 hidden"></div>
 
     <!-- JavaScript Logic -->
     <script src="js/script.js"></script>

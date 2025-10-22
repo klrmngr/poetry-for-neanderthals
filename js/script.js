@@ -10,9 +10,6 @@ let max_timer;
 let timer;
 let game_running = false;
 
-// Run the initialize function when the DOM is fully loaded
-document.addEventListener('DOMContentLoaded', initialize);
-
 document.getElementById('score-1').addEventListener('click', function() {
     if(game_running) {
         updateWords();
@@ -41,29 +38,49 @@ document.getElementById('reset-score').addEventListener('click', function() {
     resetGame();
 });
 
-document.getElementById('start-game').addEventListener('click', function() {
-    const time_input_element = document.getElementById('time-input');
-    const time = parseInt(time_input_element.value, 10);
-    
-    if (time < 1 || Number.isNaN(time)) {
-        time_input_element.style.transition = '';
-        time_input_element.classList.add('bg-red-200');
-
-        setTimeout(() => {
-            time_input_element.style.transition = 'background-color 1s ease, border-color 1s ease';
-            time_input_element.classList.remove('bg-red-200');
-        }, 300);
-    } else {
-        startGame(time);
+document.getElementById('start-game').addEventListener('click', async function() {
+    if (await loadAndValidateConfig()) {
+        startGame();
     }
 });
 
-function startGame(duration) {
+async function loadAndValidateConfig() {
+    let valid = true;
+    valid = valid && loadAndValidateMaxTimer();
+    valid = valid && await loadAndValidateWords();
+    return valid;
+}
+
+function loadAndValidateMaxTimer() {
+    const time_input_element = document.getElementById('time-input');
+    max_timer = parseInt(time_input_element.value, 10);
+    
+    if (max_timer < 1 || Number.isNaN(max_timer)) {
+        highlightErrorOnElement(time_input_element);
+        return false;
+    }
+
+    return true;
+}
+
+async function loadAndValidateWords() {
+    try {
+        words = await loadAndCombineJSON();
+    } catch (error) {
+        console.error('Error loading JSON: ' + error);
+        displayErrorMessage('Something went wrong when loading the card data, please try again later');
+        return false;
+    }
+    
+    shuffle(words);
+    return true;
+}
+
+function startGame() {
     updateWords();
     
     game_running = true;
-    timer = duration;
-    max_timer = duration;
+    timer = max_timer;
     score = 0;
     document.getElementById('score').textContent = `Score: ${score}`;
     
@@ -107,12 +124,6 @@ function updateWords() {
   current_word++;
 }
 
-async function initialize() {
-    words = await loadAndCombineJSON();
-    shuffle(words);
-    updateWords();
-}
-
 function shuffle(array) {
     let currentIndex = array.length;
   
@@ -130,29 +141,44 @@ function shuffle(array) {
   }
 
 async function loadAndCombineJSON() {
-    try {
-        const [response1, response2, response3, response4] = await Promise.all([
-            fetch('data/base_game_gray.json'),
-            fetch('data/base_game_red.json'),
-            fetch('data/1st_expansion_pack_gray.json'),
-            fetch('data/1st_expansion_pack_red.json')
-        ]);
-    
-        // Check if both responses are OK
-        if (!response1.ok || !response2.ok || !response3.ok || !response4.ok) {
-            throw new Error('Failed to load JSON files');
-        }
-    
-        const data1 = await response1.json();
-        const data2 = await response2.json();
-        const data3 = await response3.json();
-        const data4 = await response4.json();
+    const [response1, response2, response3, response4] = await Promise.all([
+        fetch('data/base_game_gray.json'),
+        fetch('data/base_game_red.json'),
+        fetch('data/1st_expansion_pack_gray.json'),
+        fetch('data/1st_expansion_pack_red.json')
+    ]);
 
-        const combinedData = [...data1.game_data, ...data2.game_data, ...data3.game_data, ...data4.game_data];
-    
-        console.log(combinedData);
-        return combinedData; // You can return or use combinedData as needed
-    } catch (error) {
-        console.error('Error:', error);
+    // Check if both responses are OK
+    if (!response1.ok || !response2.ok || !response3.ok || !response4.ok) {
+        throw new Error('Failed to load JSON files');
     }
+
+    const data1 = await response1.json();
+    const data2 = await response2.json();
+    const data3 = await response3.json();
+    const data4 = await response4.json();
+
+    const combinedData = [...data1.game_data, ...data2.game_data, ...data3.game_data, ...data4.game_data];
+
+    console.log(combinedData);
+    return combinedData; // You can return or use combinedData as needed
+}
+
+function highlightErrorOnElement(element) {
+    element.style.transition = '';
+    element.classList.add('bg-red-200');
+
+    setTimeout(() => {
+        element.style.transition = 'background-color 1s ease, border-color 1s ease';
+        element.classList.remove('bg-red-200');
+    }, 300);
+}
+
+function displayErrorMessage(message) {
+    const error_message_element = document.getElementById('error-message');
+    error_message_element.innerText = message;
+    error_message_element.classList.remove('hidden');
+    setTimeout(() => {
+        error_message_element.classList.add('hidden');
+    }, 5000);
 }
