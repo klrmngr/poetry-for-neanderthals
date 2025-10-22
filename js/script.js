@@ -147,15 +147,14 @@ function shuffle(array) {
     // While there remain elements to shuffle
     while (currentIndex != 0) {
   
-      // Pick a remaining element
-      let randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex--;
-  
-      // Swap
-      [array[currentIndex], array[randomIndex]] = [
-        array[randomIndex], array[currentIndex]];
+        // Pick a remaining element
+        let randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+
+        // Swap
+        [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
     }
-  }
+}
 
 async function loadWordsFromPaths(paths) {
     const fetch_promises = [];
