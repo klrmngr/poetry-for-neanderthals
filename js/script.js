@@ -46,8 +46,8 @@ document.getElementById('start-game').addEventListener('click', async function()
 
 async function loadAndValidateConfig() {
     let valid = true;
-    valid = valid && loadAndValidateMaxTimer();
-    valid = valid && await loadAndValidateWords();
+    valid = loadAndValidateMaxTimer() && valid;
+    valid = await loadAndValidateWords() && valid;
     return valid;
 }
 
