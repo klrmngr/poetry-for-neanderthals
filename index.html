@@ -13,8 +13,31 @@
         <div class="p-4">
             <h1 class="text-center text-xl font-bold mb-4">Options</h1>
             <div class="grid grid-cols-1 gap-2">
-                <label for="time-input">Timer length in seconds</label>
-                <input type="number" id="time-input" class="border p-2 w-full focus:outline-none" value="60">
+                <div id="time-input-container" class="grid grid-cols gap-1">
+                    <label for="time-input" class="font-bold">Timer length in seconds</label>
+                    <input type="number" id="time-input" class="border p-2 w-full focus:outline-none" value="60">
+                </div>
+
+                <div id="card-packs-container" class="grid grid-cols gap-1">
+                    <label class="font-bold">Card Packs</label>
+                    <div class="flex">
+                        <input id="base-game-gray-checkbox" type="checkbox" class="mr-2" value="data/base_game_gray.json" checked>
+                        <label for="base-game-gray-checkbox">Base game (gray side)</label>
+                    </div>
+                    <div class="flex">
+                        <input id="base-game-red-checkbox" type="checkbox" class="mr-2" value="data/base_game_red.json">
+                        <label for="base-game-red-checkbox">Base game (red side)</label>
+                    </div>
+                    <div class="flex">
+                        <input id="more-cards-box-1-expansion-gray-checkbox" type="checkbox" class="mr-2" value="data/1st_expansion_pack_gray.json">
+                        <label for="more-cards-box-1-expansion-gray-checkbox">More cards box 1 expansion (gray side)</label>
+                    </div>
+                    <div class="flex">
+                        <input id="more-cards-box-1-expansion-red-checkbox" type="checkbox" class="mr-2" value="data/1st_expansion_pack_red.json">
+                        <label for="more-cards-box-1-expansion-red-checkbox">More cards box 1 expansion (red side)</label>
+                    </div>
+                </div>
+
                 <button id="start-game" class="bg-blue-100 text-blue-600 font-semibold hover:bg-blue-200 transition duration-300 p-2 focus:outline-none">Start</button>
             </div>
         </div>
