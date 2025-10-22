@@ -64,8 +64,14 @@ function loadAndValidateMaxTimer() {
 }
 
 async function loadAndValidateWords() {
+    const selectedPackPaths = getSelectedPackPaths();
+    if (selectedPackPaths.length < 1) {
+        highlightErrorOnElement(document.getElementById('card-packs-container'));
+        return false;
+    }
+
     try {
-        words = await loadAndCombineJSON();
+        words = await loadWordsFromPaths(selectedPackPaths);
     } catch (error) {
         console.error('Error loading JSON: ' + error);
         displayErrorMessage('Something went wrong when loading the card data, please try again later');
@@ -74,6 +80,17 @@ async function loadAndValidateWords() {
     
     shuffle(words);
     return true;
+}
+
+function getSelectedPackPaths() {
+    const paths = [];
+    const checkbox_elements = document.getElementById('card-packs-container').getElementsByTagName("input");
+    for (let checkbox of checkbox_elements) {
+        if (checkbox.checked) {
+            paths.push(checkbox.value);
+        }
+    }
+    return paths;
 }
 
 function startGame() {
@@ -140,28 +157,27 @@ function shuffle(array) {
     }
   }
 
-async function loadAndCombineJSON() {
-    const [response1, response2, response3, response4] = await Promise.all([
-        fetch('data/base_game_gray.json'),
-        fetch('data/base_game_red.json'),
-        fetch('data/1st_expansion_pack_gray.json'),
-        fetch('data/1st_expansion_pack_red.json')
-    ]);
-
-    // Check if both responses are OK
-    if (!response1.ok || !response2.ok || !response3.ok || !response4.ok) {
-        throw new Error('Failed to load JSON files');
+async function loadWordsFromPaths(paths) {
+    const fetch_promises = [];
+    for (let path of paths) {
+        fetch_promises.push(fetch(path));
     }
 
-    const data1 = await response1.json();
-    const data2 = await response2.json();
-    const data3 = await response3.json();
-    const data4 = await response4.json();
+    const responses = await Promise.all(fetch_promises);
+    const combined_data = [];
 
-    const combinedData = [...data1.game_data, ...data2.game_data, ...data3.game_data, ...data4.game_data];
+    for (let response of responses) {
+        if (response.ok) {
+            const data = await response.json();
+            combined_data.push(...data.game_data);
+        } else {
+            throw new Error('Failed to load JSON files')
+        }
+    }
 
-    console.log(combinedData);
-    return combinedData; // You can return or use combinedData as needed
+    console.log('Number of loaded cards: ' + combined_data.length);
+    console.log(combined_data);
+    return combined_data;
 }
 
 function highlightErrorOnElement(element) {
